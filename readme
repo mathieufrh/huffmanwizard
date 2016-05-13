@@ -1,0 +1,16 @@
+La fenêtre principale procure une vue synthétique de ce qui se passe 
+lors de la compression, et un assistant pas-à-pas sur le modèle des
+assistants d'installation de logiciels détaille ce qui se passe à
+chaque étape, afin que le non-initié s'y voit décrire peu ou prou
+ce que vous détaillez dans votre cours, quoique d'une façon interactive.
+
+Le programme est réalisé sous Pyside qui est le binding natif de la
+librairie Qt pour Python (développé par les mêmes développeurs que Qt
+faute d'entente avec les développeurs de PyQt).
+
+Le seul paquet qu'il est nécessaire d'installer est python-pyside.
+
+Le répertoire src contient les sources du programme, le script à lancer
+étant huffgui.py.
+
+Le répertoire doc contient les docs de l'API.

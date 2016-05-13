@@ -1,0 +1,568 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Utilisation &mdash; huffman_coding 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="huffman_coding 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="Graphic interface" href="hct-gui.html" />
+    <link rel="prev" title="Welcome to hct’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="hct-gui.html" title="Graphic interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to hct’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">huffman_coding 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="utilisation">
+<h1>Utilisation<a class="headerlink" href="#utilisation" title="Permalink to this headline">¶</a></h1>
+<p>Ce module se veut didactique : pour compresser un texte vous allez devoir le faire étape par étape.</p>
+<div class="section" id="encodage">
+<h2>Encodage<a class="headerlink" href="#encodage" title="Permalink to this headline">¶</a></h2>
+<p>Vous devez uniquement fournir un texte à compresser:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;mississippi&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Si le texte contient des caractères non-ASCII ils seront convertis tel que &#8216;à&#8217; = u&#8217;xe0&#8217; de façon à pouvoir attribuer un ou plusieurs codes ASCII à tous les caractères. Pour cette raison, les caractères non-ascii sont considérés comme plusieurs caractères, ce qui ne gène en rien la compression et la décompression.</p>
+</div>
+<p>Puis il faut calculer la fréquence des caractères du texte en comptant son nombre d&#8217;occurences avec occurences():</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">occ</span> <span class="o">=</span> <span class="n">occurences</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">occ</span><span class="p">)</span>
+<span class="go">{&#39;i&#39;: 4, &#39;p&#39;: 2, &#39;s&#39;: 4, &#39;m&#39;: 1}</span>
+</pre></div>
+</div>
+<p>Il faut désormais construire l&#8217;arbre de Huffman grâce à ce dictionnaire:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">make_trie</span><span class="p">(</span><span class="n">occ</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="go">(11, (4, &#39;s&#39;), (7, (3, (1, &#39;m&#39;), (2, &#39;p&#39;)), (4, &#39;i&#39;)))</span>
+</pre></div>
+</div>
+<p>La fonction make_codes() permet d&#8217;extraire le code de chaque caractère de l&#8217;arbre:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span> <span class="o">=</span> <span class="n">make_codes</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>
+<span class="go">{&#39;i&#39;: &#39;11&#39;, &#39;p&#39;: &#39;101&#39;, &#39;s&#39;: &#39;0&#39;, &#39;m&#39;: &#39;100&#39;}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Les codes extraient de l&#8217;arbre ont tous un préfix unique : aucun code ne peut avoir le même préfix qu&#8217;un autre. De ce fait, la compression et la décompression sont des opérations très simples.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">make_ascii_codes()</p>
+</div>
+<p>Maintenant qu&#8217;on connait les codes il ne reste plus qu&#8217;à compresser le texte en y remplaçant chaque caractère par son code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">squeezed</span> <span class="o">=</span> <span class="n">squeeze</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">codes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">squeezed</span><span class="p">))</span>
+<span class="go">100110011001110110111</span>
+</pre></div>
+</div>
+<p>Il est aussi possible de convertir directement les codes en décimal:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">squeez_to_decimal</span><span class="p">(</span><span class="n">squeezed</span><span class="p">))</span>
+<span class="go">[153, 157, 23]</span>
+</pre></div>
+</div>
+<p>La fonction tree_cost() calcule le nombre de bits nécesaire à la représentation du texte compressé. Cela correspond pour un caractère donné à la longueur de son code de Huffman multiplié par son nombre d&#8217;occurences:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">tree_cost</span><span class="p">(</span><span class="n">codes</span><span class="p">,</span> <span class="n">occ</span><span class="p">))</span>
+<span class="go">{&#39;i&#39;: 8, &#39;p&#39;: 6, &#39;s&#39;: 4, &#39;m&#39;: 3}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="decodage">
+<h2>Décodage<a class="headerlink" href="#decodage" title="Permalink to this headline">¶</a></h2>
+<p>Vous devez fournir la chaine encodée et le dictionnaire charactère / codes qui a permi de l&#8217;encoder.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;i&#39;</span><span class="p">:</span> <span class="s">&#39;11&#39;</span><span class="p">,</span> <span class="s">&#39;p&#39;</span><span class="p">:</span> <span class="s">&#39;101&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">:</span> <span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">:</span> <span class="s">&#39;100&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">save_dict_to_file() and create_dict_from_file()</p>
+</div>
+<p>On créé le dictionnaire inverse avec la fonction suivante:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">codeMap</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">codes</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">codes</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">codeMap</span><span class="p">)</span>
+<span class="go">{&#39;11&#39;: &#39;i&#39;, &#39;0&#39;: &#39;s&#39;, &#39;100&#39;: &#39;m&#39;, &#39;101&#39;: &#39;p&#39;}</span>
+</pre></div>
+</div>
+<p>Étant donné que les codes on tous un préfixe unique il ne reste plus qu&#8217;à les remplacer dans la chaine compressée par le caractère qui leur correspond dans le dictionnaire:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">decode</span> <span class="o">=</span> <span class="n">unsqueeze</span><span class="p">(</span><span class="n">codeString</span><span class="p">,</span> <span class="n">codeMap</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">))</span>
+<span class="go">mississipi</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-functions">
+<h1>Module functions<a class="headerlink" href="#module-functions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="functions-list">
+<h2>Functions list<a class="headerlink" href="#functions-list" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><a class="reference internal" href="#occurences-section"><em>occurences(str)</em></a></div>
+<div class="line"><a class="reference internal" href="#make-trie-section"><em>make_trie(dict)</em></a></div>
+<div class="line"><a class="reference internal" href="#make-codes-section"><em>make_codes(tuple[, dict[, str]])</em></a></div>
+<div class="line"><a class="reference internal" href="#make-ascii-codes-section"><em>make_ascii_codes(list[, dict])</em></a></div>
+<div class="line"><a class="reference internal" href="#tree-cost-section"><em>tree_cost(dict, dict)</em></a></div>
+<div class="line"><a class="reference internal" href="#average-code-length-section"><em>average_code_length(list)</em></a></div>
+<div class="line"><a class="reference internal" href="#squeeze-section"><em>squeeze(str, dict)</em></a></div>
+<div class="line"><a class="reference internal" href="#squeeze-to-decimal-section"><em>squeez_to_decimal(list)</em></a></div>
+<div class="line"><a class="reference internal" href="#unsqueeze-section"><em>unsqueeze(str, dict)</em></a></div>
+<div class="line"><a class="reference internal" href="#create-dict-from-file-section"><em>create_dict_from_file(str)</em></a></div>
+<div class="line"><a class="reference internal" href="#save-dict-to-file-section"><em>save_dict_to_file(str, dict)</em></a></div>
+</div>
+</div>
+<div class="section" id="functions-descriptions">
+<h2>Functions descriptions<a class="headerlink" href="#functions-descriptions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="occurences-str">
+<span id="occurences-section"></span><h3>occurences(str)<a class="headerlink" href="#occurences-str" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="occurences">
+<tt class="descname">occurences</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#occurences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construit un dictionnaire du nombre d&#8217;occurences de chaque caractères du
+texte.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; un texte en langage naturel</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">le dictionnaire d&#8217;occurences</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+<p>exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>occurences(&#39;mississipi&#39;)
+=&gt; {&#39;i&#39;: 4, &#39;p&#39;: 1, &#39;s&#39;: 4, &#39;m&#39;: 1}
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="make-trie-dict">
+<span id="make-trie-section"></span><h3>make_trie(dict)<a class="headerlink" href="#make-trie-dict" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="make_trie">
+<tt class="descname">make_trie</tt><big>(</big><em>occ</em><big>)</big><a class="headerlink" href="#make_trie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construit un arbre de huffman à partir d&#8217;un dictionnaire d&#8217;occurences.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>occ</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; un dictionnaire du type charactère: nb_occurences</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">l&#8217;arbre de huffman sous forme de tuple</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+<p>exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>make_trie({&#39;i&#39;: 4, &#39;p&#39;: 1, &#39;s&#39;: 4, &#39;m&#39;: 1})
+=&gt; (10, (4, &#39;s&#39;), (6, (2, (1, &#39;m&#39;), (1, &#39;p&#39;)), (4, &#39;i&#39;)))
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="make-codes-tuple-dict-str">
+<span id="make-codes-section"></span><h3>make_codes(tuple[, dict[, str]])<a class="headerlink" href="#make-codes-tuple-dict-str" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="make_codes">
+<tt class="descname">make_codes</tt><big>(</big><em>tree</em><span class="optional">[</span>, <em>prefix={}</em><span class="optional">[</span>, <em>code=''</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#make_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construit le dictionnaire associant un code de huffman à chaque caractère à partir d&#8217;un arbre de huffman.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tree</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; un arbre de huffman</li>
+<li><strong>prefix</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; le dictionnaire qui contiendra les codes</li>
+<li><strong>code</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; le code actuel</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">le dictionnaire associant un code de huffman à chaque caractère de l&#8217;arbre</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>make_code((10, (4, &#39;s&#39;), (6, (2, (1, &#39;m&#39;), (1, &#39;p&#39;)), (4, &#39;i&#39;))))
+=&gt; {&#39;i&#39;: &#39;11&#39;, &#39;p&#39;: &#39;101&#39;, &#39;s&#39;: &#39;0&#39;, &#39;m&#39;: &#39;100&#39;}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Comme la fonction retourne un dictionnaire il n&#8217;est pas nécessaire d&#8217;utiliser le paramètre prefix, il suffit de stocker le dictionnaire retourné.</p>
+<p class="last">Le paramètre code est surtout utilisé par la fonction, il est très peu probable que vous ailelz à le spécifier.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="make-ascii-codes-list-dict">
+<span id="make-ascii-codes-section"></span><h3>make_ascii_codes(list[, dict])<a class="headerlink" href="#make-ascii-codes-list-dict" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="make_ascii_codes">
+<tt class="descname">make_ascii_codes</tt><big>(</big><em>charList</em><span class="optional">[</span>, <em>prefix={}</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#make_ascii_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contrsuit le dictionnaire associant un code ascii à chaque caractère d&#8217;une liste.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>charList</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; une liste de caractères</li>
+<li><strong>prefix</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; le dictionnaire qui contiendra les codes</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">le dictionnaire associant un code ascii à chaque caractère de la liste</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>make__ascii_code((10, (4, &#39;s&#39;), (6, (2, (1, &#39;m&#39;), (1, &#39;p&#39;)), (4, &#39;i&#39;))))
+=&gt; {&#39;i&#39;: &#39;01101001&#39;, &#39;p&#39;: &#39;01110000&#39;, &#39;s&#39;: &#39;01110011&#39;, &#39;m&#39;: &#39;01101101&#39;}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Comme la fonction retourne un dictionnaire il n&#8217;est pas nécessaire d&#8217;utiliser le paramètre prefix, il suffit de stocker le dictionnaire retourné.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="tree-cost-dict-dict">
+<span id="tree-cost-section"></span><h3>tree_cost(dict, dict)<a class="headerlink" href="#tree-cost-dict-dict" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="tree_cost">
+<tt class="descname">tree_cost</tt><big>(</big><em>codesDict</em>, <em>occ</em><big>)</big><a class="headerlink" href="#tree_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcule le nombre total de bits codant toutes les occurences de chaque caractère d&#8217;un dictionnaire.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>codesDict</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; un dictionnaire associant un code à chaque caractère</li>
+<li><strong>occ</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; un dictionnaire du type charactère: nb_occurences</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">le dictionnaire du nombre de bits total utilisé par chaque caractère</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Pour chaque caractère du dictionnaire <strong>occ</strong> cette fonction calcule la taille du code qui le représente et multiplie ce nombre par le nombre d&#8217;occurences du caractère.</p>
+<p>exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>tree_cost({&#39;i&#39;: &#39;11&#39;, &#39;p&#39;: &#39;101&#39;, &#39;s&#39;: &#39;0&#39;, &#39;m&#39;: &#39;100&#39;}, {&#39;i&#39;: 4, &#39;p&#39;: 1, &#39;s&#39;: 4, &#39;m&#39;: 1})
+=&gt; {&#39;i&#39;: 8, &#39;p&#39;: 3, &#39;s&#39;: 4, &#39;m&#39;: 3}
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="average-code-length-list">
+<span id="average-code-length-section"></span><h3>average_code_length(list)<a class="headerlink" href="#average-code-length-list" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="average_code_length">
+<tt class="descname">average_code_length</tt><big>(</big><em>squeezed</em><big>)</big><a class="headerlink" href="#average_code_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcule la taille moyenne des codes d&#8217;une liste de codes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>squeezed</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; une liste de codes (Huffman...)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">taille moyenne des codes de la liste</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+<p>exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>average_code_length([&#39;100&#39;, &#39;11&#39;, &#39;0&#39;, &#39;0&#39;, &#39;11&#39;, &#39;0&#39;, &#39;0&#39;, &#39;11&#39;, &#39;101&#39;, &#39;11&#39;])
+=&gt; 1.8
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Évidemment cette fonction est inutile pour les liste de codes de taille fixe.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="squeeze-str-dict">
+<span id="squeeze-section"></span><h3>squeeze(str, dict)<a class="headerlink" href="#squeeze-str-dict" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="squeeze">
+<tt class="descname">squeeze</tt><big>(</big><em>text</em>, <em>codes</em><big>)</big><a class="headerlink" href="#squeeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construit la liste des codes de Huffman codant un texte.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>text</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; un texte à encoder</li>
+<li><strong>codes</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; un dictionnaire contenant les codes de Huffman</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">la liste des codes de Huffman codant le texte</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>squeeze(&#39;mississipi&#39;, {&#39;i&#39;: &#39;11&#39;, &#39;p&#39;: &#39;101&#39;, &#39;s&#39;: &#39;0&#39;, &#39;m&#39;: &#39;100&#39;})
+=&gt; [&#39;100&#39;, &#39;11&#39;, &#39;0&#39;, &#39;0&#39;, &#39;11&#39;, &#39;0&#39;, &#39;0&#39;, &#39;11&#39;, &#39;101&#39;, &#39;11&#39;]
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="squeez-to-decimal-list">
+<span id="squeeze-to-decimal-section"></span><h3>squeez_to_decimal(list)<a class="headerlink" href="#squeez-to-decimal-list" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="squeez_to_decimal">
+<tt class="descname">squeez_to_decimal</tt><big>(</big><em>binList</em><big>)</big><a class="headerlink" href="#squeez_to_decimal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convertit une liste de codes binaies en liste de codes décimaux.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>binList</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; une liste de codes binaires sous forme de chaine</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">liste de codes décimaux</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+<p>exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>squeeze_to_decimal([&#39;100&#39;, &#39;11&#39;, &#39;0&#39;, &#39;0&#39;, &#39;11&#39;, &#39;0&#39;, &#39;0&#39;, &#39;11&#39;, &#39;101&#39;, &#39;11&#39;])
+=&gt; [153, 157, 3]
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="unsqueeze-str-dict">
+<span id="unsqueeze-section"></span><h3>unsqueeze(str, dict)<a class="headerlink" href="#unsqueeze-str-dict" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="unsqueeze">
+<tt class="descname">unsqueeze</tt><big>(</big><em>codeString</em>, <em>codeMap</em><big>)</big><a class="headerlink" href="#unsqueeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Décode un texte encodé à l&#8217;aide d&#8217;un dictionnaire de codes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>codeString</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; un texte encodé</li>
+<li><strong>codeMap</strong> &#8211; un dictionnaire associant un caractère à chaque code</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">liste des mots du texte décodé</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>unsqueeze(&#39;100110011001110111&#39;, {&#39;11&#39;: &#39;i&#39;, &#39;0&#39;: &#39;s&#39;, &#39;100&#39;: &#39;m&#39;, &#39;101&#39;: &#39;p&#39;})
+=&gt; mississipi
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="create-dict-from-file-str">
+<span id="create-dict-from-file-section"></span><h3>create_dict_from_file(str)<a class="headerlink" href="#create-dict-from-file-str" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="create_dict_from_file">
+<tt class="descname">create_dict_from_file</tt><big>(</big><em>fname</em><big>)</big><a class="headerlink" href="#create_dict_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a dictionnary from a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the name of the file to read</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the dictionnary created from the file</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+<p>La convention est d&#8217;utiliser un fichier .csv contant une liste de paires clé / valeur de la forme <cite>key,value</cite> à raison d&#8217;une paire par ligne.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://docs.python.org/library/csv.html#module-csv" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">csv</span></tt></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="save-dict-to-file-str-dict">
+<span id="save-dict-to-file-section"></span><h3>save_dict_to_file(str, dict)<a class="headerlink" href="#save-dict-to-file-str-dict" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="save_dict_to_file">
+<tt class="descname">save_dict_to_file</tt><big>(</big><em>fname</em>, <em>codes</em><big>)</big><a class="headerlink" href="#save_dict_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ŝave a dictionnary in a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fname</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the name of the file to write</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the dictionnary to save</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+<p>La convention est d&#8217;utiliser un fichier .csv.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://docs.python.org/library/csv.html#module-csv" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">csv</span></tt></a></p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Utilisation</a><ul>
+<li><a class="reference internal" href="#encodage">Encodage</a></li>
+<li><a class="reference internal" href="#decodage">Décodage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-functions">Module functions</a><ul>
+<li><a class="reference internal" href="#functions-list">Functions list</a></li>
+<li><a class="reference internal" href="#functions-descriptions">Functions descriptions</a><ul>
+<li><a class="reference internal" href="#occurences-str">occurences(str)</a></li>
+<li><a class="reference internal" href="#make-trie-dict">make_trie(dict)</a></li>
+<li><a class="reference internal" href="#make-codes-tuple-dict-str">make_codes(tuple[, dict[, str]])</a></li>
+<li><a class="reference internal" href="#make-ascii-codes-list-dict">make_ascii_codes(list[, dict])</a></li>
+<li><a class="reference internal" href="#tree-cost-dict-dict">tree_cost(dict, dict)</a></li>
+<li><a class="reference internal" href="#average-code-length-list">average_code_length(list)</a></li>
+<li><a class="reference internal" href="#squeeze-str-dict">squeeze(str, dict)</a></li>
+<li><a class="reference internal" href="#squeez-to-decimal-list">squeez_to_decimal(list)</a></li>
+<li><a class="reference internal" href="#unsqueeze-str-dict">unsqueeze(str, dict)</a></li>
+<li><a class="reference internal" href="#create-dict-from-file-str">create_dict_from_file(str)</a></li>
+<li><a class="reference internal" href="#save-dict-to-file-str-dict">save_dict_to_file(str, dict)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to hct&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="hct-gui.html"
+                        title="next chapter">Graphic interface</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/hct.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="hct-gui.html" title="Graphic interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to hct’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">huffman_coding 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Mathieu FOURCROY.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

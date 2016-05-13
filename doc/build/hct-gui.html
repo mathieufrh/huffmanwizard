@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Graphic interface &mdash; huffman_coding 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="huffman_coding 0.0.1 documentation" href="index.html" />
+    <link rel="prev" title="Utilisation" href="hct.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="hct.html" title="Utilisation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">huffman_coding 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="graphic-interface">
+<h1>Graphic interface<a class="headerlink" href="#graphic-interface" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="interface-presentation">
+<h2>Interface presentation<a class="headerlink" href="#interface-presentation" title="Permalink to this headline">¶</a></h2>
+<p>Voici la fenêtre que vous voyez lorsque vous lancez le programme avec son frontend graphique :</p>
+<div class="figure align-center">
+<img alt="_images/gui.png" src="_images/gui.png" />
+<p class="caption">The graphic interface window.</p>
+</div>
+<ol class="arabic simple">
+<li>Zone du texte original. Il est possible de saisir ici un texte à encoder. Il est également possible d&#8217;importer le texte via le menu Fichier. A la fin d&#8217;un décodage le texte décodé s&#8217;affiche ici.</li>
+<li>Zone du texte compressé. A la fin de l&#8217;encodage le texte compressé s&#8217;affiche ici. Il s&#8217;agit d&#8217;une suite de codes de Huffman, séparés par des espaces ; bien qu&#8217;ils ne soient pas nécessaires. Vous pouvez saisir un texte compressé ou l&#8217;importer depuis le menu Fichier dans cette zone pour de décompresser.</li>
+<li>Zone du texte encodé en ASCII. Cet encadré affiche le texte original encodé en ASCII. Cela est surtout utile pour la comparaison des deux encodages.</li>
+<li>Le bouton ENCODER permet d&#8217;encoder le texte original de la zone 1. et le bouton DECODER permet de décoder le texte compressé de la zone 2.. L&#8217;encodage et le décodage fait apparaitre un assistant pour vous guider au fil des étapes. Cet assistant est volontairement intégré à la fenêtr afin de suivre l&#8217;évolution des variables.</li>
+<li>Cette table affiche trois variables permettant de comparer les deux encodages ASCII et Huffman. La Taille est celle du texte encodé ; l&#8217;Entropie de l&#8217;encodage ; la Taille moyenne d&#8217;un code.</li>
+<li>La table des codes liste les caractères du dictionnaire utilisés pour compresser / décompresser du texte. À chacun d&#8217;eux elle fait correspondre son nombre d&#8217;occurences (Freq), son code ASCII (ASCII), son code de Huffman (Huff) et sont coût mémoire total en ASCII (Ĉ ASCII) et en code de Huffman (Ĉ Huff).</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Graphic interface</a><ul>
+<li><a class="reference internal" href="#interface-presentation">Interface presentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hct.html"
+                        title="previous chapter">Utilisation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/hct-gui.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="hct.html" title="Utilisation"
+             >previous</a> |</li>
+        <li><a href="index.html">huffman_coding 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Mathieu FOURCROY.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
